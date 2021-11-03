@@ -78,11 +78,14 @@ class RegisterScreen extends StatelessWidget {
                     const Text("Already have an account?"),
                     const SizedBox(width: 8),
                     GestureDetector(
-                      child: Text(
-                        "Login!",
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Text(
+                          "Login!",
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       onTap: () {
