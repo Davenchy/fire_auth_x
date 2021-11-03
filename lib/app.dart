@@ -1,4 +1,4 @@
-import 'package:fire_auth_x/screens/auth_screen.dart';
+import 'package:fire_auth_x/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -8,10 +8,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'FireAuthX',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const AuthScreen(),
+      home: const LoginScreen(),
     );
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'register_screen.dart';
+import 'login_screen.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +23,22 @@ class LoginScreen extends StatelessWidget {
               children: [
                 const Spacer(),
                 const Text(
-                  'Access the world',
+                  'Create New Account',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
+                TextField(
+                  keyboardType: TextInputType.name,
+                  decoration: InputDecoration(
+                    labelText: 'Username',
+                    prefixIcon: Icon(Icons.person),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
                 TextField(
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
@@ -54,9 +65,9 @@ class LoginScreen extends StatelessWidget {
                   width: 200,
                   height: 50,
                   child: ElevatedButton(
-                    child: Text('Login'),
+                    child: Text('Create Account'),
                     onPressed: () {
-                      // TODO: login
+                      // TODO: register
                     },
                   ),
                 ),
@@ -64,11 +75,11 @@ class LoginScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Don't have an account?"),
+                    const Text("Already have an account?"),
                     const SizedBox(width: 8),
                     GestureDetector(
                       child: Text(
-                        "Register Now!",
+                        "Login!",
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,
@@ -78,7 +89,7 @@ class LoginScreen extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => RegisterScreen(),
+                            builder: (context) => LoginScreen(),
                           ),
                         );
                       },
