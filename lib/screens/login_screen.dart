@@ -1,9 +1,26 @@
+import 'package:fire_auth_x/controllers/auth_controller.dart';
+import 'package:fire_auth_x/screens/components/auth_button.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import 'register_screen.dart';
+import 'components/auth_text_field.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,36 +45,32 @@ class LoginScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
-                TextField(
+                AuthTextField(
+                  controller: _emailController,
+                  focus: true,
+                  label: 'Email',
+                  icon: Icons.email,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
                 ),
                 const SizedBox(height: 16),
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                AuthTextField(
+                  controller: _passwordController,
+                  label: 'Password',
+                  icon: Icons.lock,
+                  isPassword: true,
+                  isFinal: true,
+                  onSubmitted: _login,
                 ),
                 const SizedBox(height: 32),
                 SizedBox(
                   width: 200,
                   height: 50,
-                  child: ElevatedButton(
-                    child: Text('Login'),
-                    onPressed: () {
-                      // TODO: login
-                    },
+                  child: Obx(
+                    () => AuthButton(
+                      label: 'Login',
+                      isLoading: AuthController.instance.isLoading.value,
+                      onPressed: _login,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -77,14 +90,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegisterScreen(),
-                          ),
-                        );
-                      },
+                      onTap: () => Get.offAndToNamed('/register'),
                     ),
                   ],
                 ),
@@ -96,4 +102,9 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _login() => AuthController.instance.signIn(
+        _emailController.text,
+        _passwordController.text,
+      );
 }

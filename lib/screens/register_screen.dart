@@ -1,9 +1,31 @@
+import 'package:fire_auth_x/controllers/auth_controller.dart';
+import 'package:fire_auth_x/screens/components/auth_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import 'components/auth_button.dart';
 import 'login_screen.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
+
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,47 +50,39 @@ class RegisterScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
-                TextField(
+                AuthTextField(
+                  controller: _usernameController,
+                  label: 'Username',
+                  icon: Icons.person,
                   keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    labelText: 'Username',
-                    prefixIcon: Icon(Icons.person),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                  focus: true,
                 ),
                 const SizedBox(height: 16),
-                TextField(
+                AuthTextField(
+                  controller: _emailController,
+                  label: 'Email',
+                  icon: Icons.email,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
                 ),
                 const SizedBox(height: 16),
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                AuthTextField(
+                  controller: _passwordController,
+                  label: 'Password',
+                  icon: Icons.lock,
+                  isPassword: true,
+                  isFinal: true,
+                  onSubmitted: _register,
                 ),
                 const SizedBox(height: 32),
                 SizedBox(
                   width: 200,
                   height: 50,
-                  child: ElevatedButton(
-                    child: Text('Create Account'),
-                    onPressed: () {
-                      // TODO: register
-                    },
+                  child: Obx(
+                    () => AuthButton(
+                      label: 'Create Account',
+                      isLoading: AuthController.instance.isLoading.value,
+                      onPressed: _register,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -88,14 +102,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
-                          ),
-                        );
-                      },
+                      onTap: () => Get.offAndToNamed('/login'),
                     ),
                   ],
                 ),
@@ -107,4 +114,10 @@ class RegisterScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _register() => AuthController.instance.register(
+        username: _usernameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
 }
